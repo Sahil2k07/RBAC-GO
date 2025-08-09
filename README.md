@@ -36,7 +36,7 @@ A robust Role-Based Access Control (RBAC) system implemented in Go using Echo fr
 
 This project uses a TOML configuration file for local development credentials.
 
-Create a `config.toml` file in the root or `config/` directory with the following example content:
+Create a `dev.toml` file in the root directory with the following example content:
 
 ```toml
 [database]
