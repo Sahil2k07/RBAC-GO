@@ -52,6 +52,11 @@ type (
 		Country   string      `json:"country"`
 		Roles     []enum.Role `json:"roles" validate:"required,dive"`
 	}
+
+	ChangePasswordRequest struct {
+		OldPassword string `json:"oldPassword" validate:"required"`
+		NewPassword string `json:"newPassword" validate:"required,min=8"`
+	}
 )
 
 func NewUserResponse(m model.User) UserView {
