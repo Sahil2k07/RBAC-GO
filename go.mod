@@ -5,6 +5,8 @@ go 1.23.1
 require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/charmbracelet/log v0.4.2
+	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/labstack/echo-jwt/v4 v4.3.1
 	github.com/labstack/echo/v4 v4.13.4
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.30.1
