@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"rabc-go/internal/config"
+	"rbac-go/internal/config"
 
 	charmbracelet "github.com/charmbracelet/log"
 	"gorm.io/driver/postgres"

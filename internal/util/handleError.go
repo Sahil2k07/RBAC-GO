@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	errz "rabc-go/internal/error"
+	errz "rbac-go/internal/error"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"

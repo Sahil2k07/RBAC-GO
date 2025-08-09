@@ -1,25 +1,13 @@
 package util
 
 import (
+	"rbac-go/internal/view"
 	"strings"
 
 	"gorm.io/gorm"
 )
 
-type (
-	PageFilter struct {
-		PageSize    int  `json:"pageSize"`
-		CurrentPage int  `json:"currentPage"`
-		AllPages    bool `json:"allPages"`
-	}
-
-	SortFilter struct {
-		SortField string `json:"sortField"`
-		SortOrder string `json:"sortOrder"`
-	}
-)
-
-func AddPagination(db *gorm.DB, pf PageFilter, sf SortFilter) *gorm.DB {
+func AddPagination(db *gorm.DB, pf view.PageFilter, sf view.SortFilter) *gorm.DB {
 	if sf.SortField != "" {
 		order := "asc"
 		if strings.ToLower(sf.SortOrder) == "desc" {

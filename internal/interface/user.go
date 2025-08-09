@@ -1,0 +1,28 @@
+package interfaces
+
+import (
+	"rbac-go/internal/model"
+	"rbac-go/internal/view"
+)
+
+type (
+	UserRepository interface {
+		ListUsers(req view.ListUsers) ([]model.User, int64, error)
+
+		GetUser(id uint) (model.User, error)
+
+		UpdateUser(req view.UserView) error
+
+		DeleteUser(id uint) error
+	}
+
+	UserService interface {
+		ListUsers(req view.ListUsers) (view.ListResponse, error)
+
+		GetUser(id string) (view.UserView, error)
+
+		UpdateUser(req view.UserView) error
+
+		DeleteUser(id string) error
+	}
+)

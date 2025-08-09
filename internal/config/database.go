@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type DatabaseConfig struct {
+type databaseConfig struct {
 	Host     string `toml:"db_host"`
 	Port     string `toml:"db_port"`
 	User     string `toml:"db_user"`
@@ -12,8 +12,8 @@ type DatabaseConfig struct {
 	Name     string `toml:"db_name"`
 }
 
-func getDatabaseConfig() DatabaseConfig {
-	return DatabaseConfig{
+func getDatabaseConfig() databaseConfig {
+	return databaseConfig{
 		Host:     globalConfig.Database.Host,
 		Port:     globalConfig.Database.Port,
 		User:     globalConfig.Database.User,

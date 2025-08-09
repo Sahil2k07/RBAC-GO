@@ -10,8 +10,8 @@ import (
 )
 
 type appConfig struct {
-	Database DatabaseConfig `toml:"database"`
-	JWT      JWTConfig      `toml:"jwt"`
+	Database databaseConfig `toml:"database"`
+	JWT      jwtConfig      `toml:"jwt"`
 	Origins  []string       `toml:"origins"`
 }
 
@@ -29,14 +29,14 @@ func loadProdConfig() {
 	origins := strings.Split(os.Getenv("APP_ORIGINS"), ",")
 
 	globalConfig = appConfig{
-		Database: DatabaseConfig{
+		Database: databaseConfig{
 			Host:     os.Getenv("DB_HOST"),
 			Port:     os.Getenv("DB_PORT"),
 			User:     os.Getenv("DB_USER"),
 			Password: os.Getenv("DB_PASSWORD"),
 			Name:     os.Getenv("DB_NAME"),
 		},
-		JWT: JWTConfig{
+		JWT: jwtConfig{
 			CookieName: os.Getenv("COOKIE_NAME"),
 			Secret:     os.Getenv("JWT_SECRET"),
 		},
