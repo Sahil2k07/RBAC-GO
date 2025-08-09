@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-
 	"net/url"
 	"path/filepath"
 	"runtime"
@@ -12,23 +11,31 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// ANSI color codes
+// ANSI color codes with bold
 const (
 	reset         = "\033[0m"
-	red           = "\033[31m"
+	bold          = "\033[1m"
+	brightRed     = "\033[91m" // error color
 	violet        = "\033[35m"
 	green         = "\033[32m"
 	cyan          = "\033[36m"
+	blue          = "\033[34m" // deep blue for Method key
 	brightWhite   = "\033[97m"
-	seagreen      = "\033[38;5;49m"
+	uniqueTeal    = "\033[38;5;37m" // vibrant teal, unique in the palette
 	brightYellow  = "\033[93m"
 	brightMagenta = "\033[95m"
 	brightBlue    = "\033[94m"
+	brightCyan    = "\033[96m" // stack trace key color
+	maroon        = "\033[38;5;124m"
 	gray          = "\033[90m"
 )
 
-// colorize helper
-func colorize(text, colorCode string) string {
+// colorize for keys: bold + color, for values: normal color
+func colorizeKey(text, colorCode string) string {
+	return bold + colorCode + text + reset
+}
+
+func colorizeValue(text, colorCode string) string {
 	return colorCode + text + reset
 }
 
@@ -58,22 +65,22 @@ func getCleanStackTrace(skip, maxFrames int) string {
 func generateLogMessage(c echo.Context, err error) {
 	logger := log.Default()
 
-	routeKey := colorize("Route", violet)
-	routeVal := colorize(c.Path(), green)
+	routeKey := colorizeKey("Route", violet)
+	routeVal := colorizeValue(c.Path(), green)
 
-	methodKey := colorize("Method", cyan)
-	methodVal := colorize(c.Request().Method, brightYellow)
+	methodKey := colorizeKey("Method", blue)
+	methodVal := colorizeValue(c.Request().Method, brightYellow)
 
-	paramsKey := colorize("Params", brightWhite)
+	paramsKey := colorizeKey("Params", brightWhite)
 	paramsVal := formatParams(c.ParamNames(), c.ParamValues())
 
-	queryKey := colorize("Query", brightMagenta)
+	queryKey := colorizeKey("Query", uniqueTeal)
 	queryVal := formatQueryParams(c.QueryParams())
 
-	errKey := colorize("Error", red)
-	errMsg := colorize(err.Error(), red)
+	errKey := colorizeKey("Error", brightRed)
+	errMsg := colorizeValue(err.Error(), brightRed)
 
-	stackHeader := colorize("Stack Trace:", brightBlue)
+	stackHeader := colorizeKey("Stack Trace:", brightCyan)
 	stackTrace := getCleanStackTrace(4, 10)
 
 	logger.Errorf("\n🐛 API Error\n"+
@@ -95,15 +102,15 @@ func generateLogMessage(c echo.Context, err error) {
 
 func formatParams(keys, values []string) string {
 	if len(keys) == 0 {
-		return colorize("<none>", gray)
+		return colorizeValue("<none>", gray)
 	}
 
 	var pairs []string
 	for i, k := range keys {
-		keyColored := colorize(k, brightWhite)
-		valColored := colorize("<missing>", gray)
+		keyColored := colorizeKey(k, brightWhite)
+		valColored := colorizeValue("<missing>", gray)
 		if i < len(values) {
-			valColored = colorize(values[i], gray)
+			valColored = colorizeValue(values[i], gray)
 		}
 		pairs = append(pairs, fmt.Sprintf("%s=%s", keyColored, valColored))
 	}
@@ -113,14 +120,14 @@ func formatParams(keys, values []string) string {
 
 func formatQueryParams(values url.Values) string {
 	if len(values) == 0 {
-		return colorize("<none>", gray)
+		return colorizeValue("<none>", gray)
 	}
 
 	var parts []string
 	for key, vals := range values {
-		keyColored := colorize(key, brightMagenta)
+		keyColored := colorizeKey(key, uniqueTeal)
 		for _, v := range vals {
-			valColored := colorize(v, gray)
+			valColored := colorizeValue(v, gray)
 			parts = append(parts, fmt.Sprintf("%s=%s", keyColored, valColored))
 		}
 	}
