@@ -6,7 +6,7 @@ db_password = "sahil"
 db_name = "RBAC-GO"
 
 [jwt]
-cookie_name = "rabc-cookie"
+cookie_name = "rbac-cookie"
 secret = "K3#v@9$1!pZ^mL2&uQ7*rF4)gT8_W+oB"
 
 origins = ["http://localhost:3000", "https://example.com"]

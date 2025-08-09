@@ -40,6 +40,14 @@ func (e *AlreadyExistsError) Error() string {
 	return e.Msg
 }
 
+type InternalError struct {
+	Msg string
+}
+
+func (e *InternalError) Error() string {
+	return e.Msg
+}
+
 // Optionally helper constructors
 
 func NewNotFound(msg string) error {
@@ -60,4 +68,8 @@ func NewForbidden(msg string) error {
 
 func NewAlreadyExists(msg string) error {
 	return &AlreadyExistsError{Msg: msg}
+}
+
+func NewInternalError(msg string) error {
+	return &InternalError{Msg: msg}
 }

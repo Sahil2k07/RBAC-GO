@@ -2,9 +2,9 @@ package main
 
 import (
 	"net/http"
-	"rabc-go/internal/config"
-	"rabc-go/internal/database"
-	"rabc-go/internal/handler"
+	"rbac-go/internal/config"
+	"rbac-go/internal/database"
+	"rbac-go/internal/handler"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
