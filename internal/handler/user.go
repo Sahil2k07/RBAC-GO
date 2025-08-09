@@ -19,9 +19,10 @@ func NewUserHandler(g *echo.Group, s interfaces.UserService) *userHandler {
 	h := &userHandler{us: s}
 
 	g.POST("/user", h.ListUsers, authentication.WithRole(enum.ADMIN))
-	g.PUT("/user", h.UpdateUser, authentication.WithRole())
-	g.GET("/user/:id", h.GetUser, authentication.WithRole())
+	g.PUT("/user", h.UpdateUser)
+	g.GET("/user/:id", h.GetUser)
 	g.DELETE("/user/:id", h.DeleteUser, authentication.WithRole(enum.ADMIN))
+	g.PATCH("/user/update-password", h.UpdatePassword)
 
 	return h
 }
@@ -70,6 +71,24 @@ func (h *userHandler) DeleteUser(c echo.Context) error {
 	id := c.Param("id")
 
 	if err := h.us.DeleteUser(id); err != nil {
+		return util.HandleError(c, err)
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (h *userHandler) UpdatePassword(c echo.Context) error {
+	user, err := authentication.GetUserFromToken(c)
+	if err != nil {
+		return util.HandleError(c, err)
+	}
+
+	var req view.ChangePasswordRequest
+	if err := util.BindAndValidate(c, &req); err != nil {
+		return util.HandleError(c, err)
+	}
+
+	if err := h.us.UpdatePassword(user, req); err != nil {
 		return util.HandleError(c, err)
 	}
 

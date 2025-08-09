@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"rbac-go/internal/authentication"
 	"rbac-go/internal/model"
 	"rbac-go/internal/view"
 )
@@ -14,6 +15,8 @@ type (
 		UpdateUser(req view.UserView) error
 
 		DeleteUser(id uint) error
+
+		SaveUser(model.User) error
 	}
 
 	UserService interface {
@@ -24,5 +27,7 @@ type (
 		UpdateUser(req view.UserView) error
 
 		DeleteUser(id string) error
+
+		UpdatePassword(u *authentication.UserData, req view.ChangePasswordRequest) error
 	}
 )

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"rbac-go/internal/authentication"
 	interfaces "rbac-go/internal/interface"
 	"rbac-go/internal/model"
 	"rbac-go/internal/util"
@@ -67,4 +68,29 @@ func (s *userService) DeleteUser(id string) error {
 	}
 
 	return nil
+}
+
+func (s *userService) UpdatePassword(u *authentication.UserData, req view.ChangePasswordRequest) error {
+	user, err := s.repo.GetUser(u.ID)
+	if err != nil {
+		return nil
+	}
+
+	err = authentication.CheckPassword(user.Password, req.OldPassword)
+	if err != nil {
+		return err
+	}
+
+	pass, err := authentication.HashPassword(req.NewPassword)
+	if err != nil {
+		return err
+	}
+
+	user.Password = pass
+
+	if err := s.repo.SaveUser(user); err != nil {
+		return err
+	}
+
+	return err
 }

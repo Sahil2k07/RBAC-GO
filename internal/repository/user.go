@@ -15,7 +15,7 @@ func NewUserRepository() interfaces.UserRepository {
 	return &userRepository{}
 }
 
-func (s *userRepository) GetUser(id uint) (model.User, error) {
+func (r *userRepository) GetUser(id uint) (model.User, error) {
 	var user model.User
 
 	if err := database.DB.Preload("Profile").First(&user, id).Error; err != nil {
@@ -25,7 +25,7 @@ func (s *userRepository) GetUser(id uint) (model.User, error) {
 	return user, nil
 }
 
-func (s *userRepository) ListUsers(req view.ListUsers) ([]model.User, int64, error) {
+func (r *userRepository) ListUsers(req view.ListUsers) ([]model.User, int64, error) {
 	q := database.DB.Model(&model.User{}).
 		Preload("Profile").
 		Joins("JOIN profiles ON profiles.user_id = users.id")
@@ -73,8 +73,8 @@ func (s *userRepository) ListUsers(req view.ListUsers) ([]model.User, int64, err
 	return models, count, nil
 }
 
-func (s *userRepository) UpdateUser(req view.UserView) error {
-	user, err := s.GetUser(req.ID)
+func (r *userRepository) UpdateUser(req view.UserView) error {
+	user, err := r.GetUser(req.ID)
 	if err != nil {
 		return err
 	}
@@ -93,15 +93,23 @@ func (s *userRepository) UpdateUser(req view.UserView) error {
 		Country:   req.Country,
 	}
 
-	if err := database.DB.Save(&user).Error; err != nil {
+	if err := r.SaveUser(user); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *userRepository) DeleteUser(id uint) error {
+func (r *userRepository) DeleteUser(id uint) error {
 	if err := database.DB.Delete(&model.User{}, id).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *userRepository) SaveUser(u model.User) error {
+	if err := database.DB.Save(&u).Error; err != nil {
 		return err
 	}
 
