@@ -19,6 +19,7 @@ func main() {
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     configs.Origins,
